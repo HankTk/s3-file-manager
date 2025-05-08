@@ -10,17 +10,15 @@ import { FileSizePipe } from './pipes/file-size.pipe';
 import { FileManagerComponent } from './file-manager/file-manager.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FileSizePipe,
-    FileManagerComponent
-  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CommonModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AppComponent,
+    FileSizePipe,
+    FileManagerComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

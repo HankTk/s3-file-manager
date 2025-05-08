@@ -1,12 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { S3Service } from '../services/s3.service';
 import { S3File, UploadProgress } from '../models/s3-file.model';
 import { Subscription } from 'rxjs';
+import { FileSizePipe } from '../pipes/file-size.pipe';
 
 @Component({
   selector: 'app-file-manager',
   templateUrl: './file-manager.component.html',
-  styleUrls: ['./file-manager.component.css']
+  styleUrls: ['./file-manager.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    FileSizePipe
+  ]
 })
 export class FileManagerComponent implements OnInit, OnDestroy {
 
