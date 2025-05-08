@@ -58,9 +58,9 @@ npm install
      # AWS Credentials
      AWS_ACCESS_KEY_ID=your_access_key_id
      AWS_SECRET_ACCESS_KEY=your_secret_access_key
-     AWS_REGION=your-region
-     AWS_BUCKET_NAME=your-bucket-name
-     AWS_ENDPOINT=your-endpoint
+     AWS_REGION=your_region
+     AWS_BUCKET_NAME=your_bucket_name
+     AWS_ENDPOINT=your_endpoint
      ```
    - Make sure to add `.env` to your `.gitignore` file to prevent committing sensitive information
    - Never commit actual AWS credentials to version control
