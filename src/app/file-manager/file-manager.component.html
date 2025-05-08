@@ -32,7 +32,7 @@
         <td>
           <a [href]="file.url" target="_blank">{{ file.Key }}</a>
         </td>
-        <td>{{ formatFileSize(file.Size) }}</td>
+        <td>{{ file.Size | fileSize }}</td>
         <td>{{ file.LastModified | date:'medium' }}</td>
         <td>
           <button (click)="deleteFile(file.Key)" class="delete-btn">Delete</button>
