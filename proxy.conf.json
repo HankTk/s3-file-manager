@@ -1,0 +1,30 @@
+{
+  "/api": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "headers": {
+      "Host": "s3.us-west-1.amazonaws.com"
+    }
+  },
+  "/api/s3": {
+    "target": "https://s3.us-west-1.amazonaws.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/s3/upload": "/feedback.s3.takaku",
+      "^/api/s3/list": "/feedback.s3.takaku?list-type=2",
+      "^/api/s3/delete": "/feedback.s3.takaku"
+    },
+    "headers": {
+      "Host": "s3.us-west-1.amazonaws.com",
+      "Authorization": "AWS4-HMAC-SHA256 Credential=AKIA5PP664NI5JMOAIMB/20240321/us-west-1/s3/aws4_request",
+      "X-Amz-Date": "20240321T000000Z",
+      "X-Amz-Content-Sha256": "UNSIGNED-PAYLOAD"
+    }
+  }
+} 

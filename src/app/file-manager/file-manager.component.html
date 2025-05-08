@@ -1,0 +1,43 @@
+<!-- File Selection Interface -->
+<div class="upload-section">
+  <input type="file" (change)="onFileSelected($event)" [disabled]="uploading">
+  <div *ngIf="uploadProgress" class="upload-progress">
+    <div class="progress-bar">
+      <div class="progress" [style.width.%]="uploadProgress.progress"></div>
+    </div>
+    <span>{{ uploadProgress.fileName }} - {{ uploadProgress.progress }}%</span>
+  </div>
+</div>
+
+<div *ngIf="error" class="error-message">
+  {{ error }}
+</div>
+
+<div class="files-section">
+  <h2>Files</h2>
+  <div *ngIf="files.length === 0" class="no-files">
+    No files found
+  </div>
+  <table *ngIf="files.length > 0">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Size</th>
+        <th>Last Modified</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let file of files">
+        <td>
+          <a [href]="file.url" target="_blank">{{ file.Key }}</a>
+        </td>
+        <td>{{ formatFileSize(file.Size) }}</td>
+        <td>{{ file.LastModified | date:'medium' }}</td>
+        <td>
+          <button (click)="deleteFile(file.Key)" class="delete-btn">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
