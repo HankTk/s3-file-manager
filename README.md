@@ -11,30 +11,34 @@ A modern web application built with Angular 16 for managing files in Amazon S3 b
   - Create new folders
   - Rename files and folders
   - Move files between folders
+  - File preview for common formats (images, PDFs, text)
 
 - **User Interface**
-  - Modern and responsive design
-  - Drag and drop file upload
+  - Modern and responsive design using Angular Material
+  - Drag and drop file upload with progress tracking
   - File preview capabilities
   - Progress indicators for uploads/downloads
   - Breadcrumb navigation
   - Search and filter functionality
+  - Dark/Light theme support
 
 - **Security**
-  - Secure file operations using AWS SDK
+  - Secure file operations using AWS SDK v3
   - Role-based access control
   - Secure credential management
   - File encryption support
+  - CORS configuration
+  - Rate limiting
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v16 or higher)
 - Angular CLI (v16.2.16)
 - AWS account with S3 access
 - AWS credentials configured
 - Git
 
-## Installation and Setup
+## Quick Start
 
 1. Clone the repository:
 ```bash
@@ -57,69 +61,33 @@ npm install
      S3_BUCKET_NAME=your_bucket_name
      ```
 
-4. Start the backend server:
+4. Start the development servers:
 ```bash
-# Start the Node.js backend server
-node server.js
-# or
+# Terminal 1 - Start the backend server
 npm run server
-```
 
-The backend server will run on port 3000 by default.
-
-5. Start the frontend development server (in a new terminal):
-```bash
-# Start the Angular development server
+# Terminal 2 - Start the frontend server
 npm start
-# or
-ng serve
 ```
 
-The frontend application will be available at `http://localhost:4200/`
+The application will be available at:
+- Frontend: `http://localhost:4200`
+- Backend API: `http://localhost:3000`
 
-## Server Requirements
+## System Requirements
 
-### Backend Server (Node.js)
-- Node.js server running on port 3000
-- Express.js for API endpoints
-- AWS SDK for S3 operations
-- Minimum 1GB RAM recommended
-- 500MB free disk space
-
-### Frontend Server (Angular)
-- Angular development server on port 4200
-- Minimum 1GB RAM recommended
-- 500MB free disk space
+### Development Environment
+- Node.js v16+
+- 2GB RAM minimum
+- 1GB free disk space
+- Modern web browser
 
 ### Production Environment
-- Node.js server with PM2 or similar process manager
-- Minimum 4GB RAM recommended
+- Node.js v16+
+- 4GB RAM minimum
 - 2GB free disk space
 - SSL certificate for HTTPS
 - Domain name (optional)
-
-### Server Setup for Production
-
-1. Install PM2 globally:
-```bash
-npm install -g pm2
-```
-
-2. Build the frontend application:
-```bash
-npm run build --prod
-```
-
-3. Start the backend server using PM2:
-```bash
-pm2 start server.js --name "s3-file-manager-backend"
-```
-
-4. Configure PM2 to start on system boot:
-```bash
-pm2 startup
-pm2 save
-```
 
 ## Project Structure
 
@@ -127,80 +95,101 @@ pm2 save
 s3-file-manager/
 ├── src/
 │   ├── app/
-│   │   ├── components/     # UI components
-│   │   ├── services/       # AWS and other services
-│   │   ├── models/         # TypeScript interfaces
-│   │   └── utils/          # Utility functions
-│   ├── assets/            # Static assets
-│   └── environments/      # Environment configurations
-├── server.js             # Backend server file
-├── routes/              # API routes
-├── controllers/         # Route controllers
-├── middleware/          # Custom middleware
-├── tests/              # Test files
-└── dist/              # Build output
+│   │   ├── file-manager/    # File manager component
+│   │   ├── services/        # AWS and other services
+│   │   ├── models/          # TypeScript interfaces
+│   │   ├── pipes/           # Custom pipes
+│   │   └── app.component.*  # Main application component
+│   ├── assets/             # Static assets
+│   └── environments/       # Environment configurations
+├── server/
+│   └── server.js          # Backend server file
+├── documents/            # Documentation and screenshots
+├── .angular/            # Angular build files
+├── .vscode/            # VS Code configuration
+└── dist/               # Build output
 ```
 
 ## Development
 
-### Backend Development Server
+### Available Scripts
 
-The backend server runs on port 3000 and provides the following features:
+```bash
+# Start frontend development server
+npm start
+
+# Start backend development server
+npm run server
+
+# Build the application
+npm run build
+
+# Run unit tests
+npm test
+
+# Run e2e tests
+npm run e2e
+
+# Lint the code
+npm run lint
+```
+
+### Backend Development
+
+The backend server provides:
 - RESTful API endpoints for S3 operations
 - File upload/download handling
 - Authentication middleware
 - Error handling
 - CORS configuration
+- Rate limiting
+- Request logging
 
-To start the backend server:
-```bash
-node server.js
-```
+### Frontend Development
 
-### Frontend Development Server
-
-The frontend development server runs on port 4200 and provides:
+The frontend application features:
 - Hot Module Replacement (HMR)
 - Live reload on file changes
 - Source maps for debugging
 - Error overlay for runtime errors
-
-To start the frontend server:
-```bash
-npm start
-```
-
-### Build
-
-Run `npm run build` or `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-### Running unit tests
-
-Run `npm test` or `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-### Running end-to-end tests
-
-Run `npm run e2e` or `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+- Angular Material components
+- Responsive design
 
 ## Deployment
+
+### Production Build
 
 1. Build the frontend application:
 ```bash
 npm run build --prod
 ```
 
-2. Deploy to your preferred hosting service (AWS S3, Netlify, Vercel, etc.)
+2. Deploy to your preferred hosting service:
+   - AWS S3 + CloudFront
+   - Netlify
+   - Vercel
+   - Heroku
 
-3. Configure environment variables on your hosting platform
+### Server Setup
 
-4. Set up a production server:
-   - Install Node.js on your server
-   - Install PM2: `npm install -g pm2`
-   - Copy the built files to your server
-   - Start the backend server using PM2
-   - Configure your web server (Nginx/Apache) as a reverse proxy
+1. Install PM2 globally:
+```bash
+npm install -g pm2
+```
 
-Example Nginx configuration:
+2. Start the backend server:
+```bash
+pm2 start server.js --name "s3-file-manager-backend"
+```
+
+3. Configure PM2 to start on system boot:
+```bash
+pm2 startup
+pm2 save
+```
+
+### Nginx Configuration Example
+
 ```nginx
 server {
     listen 80;
@@ -208,12 +197,8 @@ server {
 
     # Frontend
     location / {
-        proxy_pass http://localhost:4200;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
+        root /path/to/your/dist;
+        try_files $uri $uri/ /index.html;
     }
 
     # Backend API
@@ -228,15 +213,20 @@ server {
 }
 ```
 
-## Technologies Used
+## Technologies
 
-- Angular 16
-- AWS SDK for JavaScript v3
-- RxJS
-- TypeScript
-- Angular Material
-- SCSS
-- Jest for testing
+- **Frontend**
+  - Angular 16
+  - Angular Material
+  - RxJS
+  - TypeScript
+  - SCSS
+
+- **Backend**
+  - Node.js
+  - Express.js
+  - AWS SDK v3
+  - Jest
 
 ## Contributing
 
@@ -254,13 +244,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-For support, please [create an issue](your-repository-url/issues) in the repository.
-
-## Acknowledgments
-
-- AWS SDK team for their excellent documentation
-- Angular team for the amazing framework
-- All contributors who have helped shape this project
+For support:
+- [Create an issue](your-repository-url/issues)
+- Check the [documentation](./docs)
+- Join our [Discord community](your-discord-url)
 
 ## Screenshots
 
