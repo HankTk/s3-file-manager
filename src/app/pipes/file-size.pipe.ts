@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FileSizePipe implements PipeTransform 
 {
-  transform(bytes: number | undefined): string 
+  transform (bytes: number | undefined): string 
   {
     if (!bytes || bytes === 0) 
     {

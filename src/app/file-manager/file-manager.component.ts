@@ -2,9 +2,10 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { S3Service } from '../services/s3.service';
-import { S3File, UploadProgress } from '../models/s3-file.model';
 import { Subscription } from 'rxjs';
 import { FileSizePipe } from '../pipes/file-size.pipe';
+import { S3File } from '../models/s3-file.interface';
+import { UploadProgress } from '../models/upload-progress.interface';
 
 @Component({
   selector: 'app-file-manager',
@@ -29,7 +30,7 @@ export class FileManagerComponent implements OnInit, OnDestroy
 
   private s3Service = inject(S3Service);
 
-  private handleUploadProgress(progress: UploadProgress | null) 
+  private handleUploadProgress (progress: UploadProgress | null) 
   {
     this.uploadProgress = progress;
     this.uploading = progress?.status === 'uploading';
@@ -39,7 +40,7 @@ export class FileManagerComponent implements OnInit, OnDestroy
     }
   }
 
-  ngOnInit() 
+  ngOnInit () 
   {
     this.uploadProgressSubscription = this.s3Service.getUploadProgress().subscribe(
       this.handleUploadProgress.bind(this)
@@ -47,12 +48,12 @@ export class FileManagerComponent implements OnInit, OnDestroy
     this.loadFiles();
   }
 
-  ngOnDestroy() 
+  ngOnDestroy () 
   {
     this.uploadProgressSubscription.unsubscribe();
   }
 
-  async loadFiles() 
+  async loadFiles () 
   {
     try 
     {
@@ -65,7 +66,7 @@ export class FileManagerComponent implements OnInit, OnDestroy
     }
   }
 
-  async onFileSelected(event: Event) 
+  async onFileSelected (event: Event) 
   {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) 
@@ -90,7 +91,7 @@ export class FileManagerComponent implements OnInit, OnDestroy
     }
   }
 
-  async deleteFile(key: string) 
+  async deleteFile (key: string) 
   {
     if (confirm('Are you sure you want to delete this file?')) 
     {

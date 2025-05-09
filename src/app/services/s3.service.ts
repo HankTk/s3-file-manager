@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { S3File, UploadProgress } from '../models/s3-file.model';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { InitService } from './init.service';
+import { UploadProgress } from '../models/upload-progress.interface';
+import { S3File } from '../models/s3-file.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +15,12 @@ export class S3Service
 
   private initService = inject(InitService);
 
-  constructor() 
+  constructor () 
   {
     this.initializeS3Client();
   }
 
-  private async initializeS3Client(): Promise<void> 
+  private async initializeS3Client (): Promise<void> 
   {
     try 
     {
@@ -48,7 +49,7 @@ export class S3Service
     }
   }
 
-  private async ensureS3Client() 
+  private async ensureS3Client () 
   {
     if (!this.s3Client) 
     {
@@ -61,12 +62,12 @@ export class S3Service
     return this.s3Client;
   }
 
-  getUploadProgress(): Observable<UploadProgress | null> 
+  getUploadProgress (): Observable<UploadProgress | null> 
   {
     return this.uploadProgress.asObservable();
   }
 
-  async uploadFile(file: File): Promise<string> 
+  async uploadFile (file: File): Promise<string> 
   {
     try 
     {
@@ -93,7 +94,7 @@ export class S3Service
         Body: new Uint8Array(arrayBuffer)
       });
 
-      const response = await s3Client.send(command);
+      await s3Client.send(command);
       
       this.uploadProgress.next({
         fileName: file.name,
@@ -116,7 +117,7 @@ export class S3Service
     }
   }
 
-  async listFiles(): Promise<S3File[]> 
+  async listFiles (): Promise<S3File[]> 
   {
     try 
     {
@@ -139,7 +140,7 @@ export class S3Service
     }
   }
 
-  async deleteFile(key: string): Promise<void> 
+  async deleteFile (key: string): Promise<void> 
   {
     try 
     {
