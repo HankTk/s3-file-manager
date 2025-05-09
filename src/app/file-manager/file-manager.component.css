@@ -1,3 +1,10 @@
+/**
+ * File: file-manager.component.css
+ * Description: Styles for the file manager component including file list, upload interface, and progress indicators
+ * Author: Hidenori Takaku
+ * Date: 2024
+ */
+
 .upload-section {
   display: flex;
   justify-content: center;

@@ -1,3 +1,10 @@
+/**
+ * File: env-config.interface.ts
+ * Description: Interface defining the structure for environment configuration
+ * Author: Hidenori Takaku
+ * Date: 2024
+ */
+
 export interface EnvConfig {
   AWS_REGION: string;
   AWS_BUCKET_NAME: string;

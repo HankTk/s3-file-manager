@@ -1,3 +1,10 @@
+/**
+ * File: file-size.pipe.ts
+ * Description: Angular pipe for formatting file sizes in human-readable format
+ * Author: Hidenori Takaku
+ * Date: 2024
+ */
+
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({

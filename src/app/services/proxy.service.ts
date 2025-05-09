@@ -1,3 +1,10 @@
+/**
+ * File: proxy.service.ts
+ * Description: Service for handling proxy operations and API requests
+ * Author: Hidenori Takaku
+ * Date: 2024
+ */
+
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';

@@ -1,3 +1,10 @@
+/**
+ * File: s3.service.ts
+ * Description: Service for handling AWS S3 operations including file upload, download, and management
+ * Author: Hidenori Takaku
+ * Date: 2024
+ */
+
 import { Injectable, inject } from '@angular/core';
 import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { BehaviorSubject, Observable } from 'rxjs';

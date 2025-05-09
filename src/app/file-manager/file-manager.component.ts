@@ -1,3 +1,10 @@
+/**
+ * File: file-manager.component.ts
+ * Description: Angular component for managing S3 file operations including upload, delete, and list files
+ * Author: Hidenori Takaku
+ * Date: 2024
+ */
+
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

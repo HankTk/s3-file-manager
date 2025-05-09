@@ -1,3 +1,10 @@
+/**
+ * File: app.component.ts
+ * Description: Main application component that serves as the root component
+ * Author: Hidenori Takaku
+ * Date: 2024
+ */
+
 import { Component } from '@angular/core';
 import { FileManagerComponent } from './file-manager/file-manager.component';
 import { CommonModule } from '@angular/common';
