@@ -9,6 +9,7 @@ import { InitService } from './init.service';
   providedIn: 'root'
 })
 export class S3Service {
+
   private s3Client: S3Client | null = null;
   private uploadProgress = new BehaviorSubject<UploadProgress | null>(null);
 
@@ -130,4 +131,5 @@ export class S3Service {
       throw error;
     }
   }
+
 } 

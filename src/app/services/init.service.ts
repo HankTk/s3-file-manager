@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class InitService {
+
   constructor(private http: HttpClient) {}
 
   init(): Promise<void> {
@@ -28,4 +29,5 @@ export class InitService {
       });
     });
   }
+
 } 
