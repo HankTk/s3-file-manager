@@ -114,6 +114,77 @@ s3-file-manager/
 └── dist/               # Build output
 ```
 
+### Project Structure Diagram
+
+```mermaid
+graph TD
+    %% Project Structure
+    Root[s3-file-manager] --> Src[src/]
+    Root --> Server[server/]
+    Root --> Docs[documents/]
+    Root --> Angular[.angular/]
+    Root --> VSCode[.vscode/]
+    Root --> Dist[dist/]
+    
+    Src --> App[app/]
+    Src --> Assets[assets/]
+    Src --> Env[environments/]
+    
+    App --> FileManager[file-manager/]
+    App --> Services[services/]
+    App --> Models[models/]
+    App --> Pipes[pipes/]
+    App --> AppComponent[app.component.*]
+```
+
+### Class Relationships and Dependencies
+
+```mermaid
+graph TD
+    %% Class Relationships
+    FileManagerComponent[FileManagerComponent] --> FileService[FileService]
+    FileManagerComponent --> S3Service[S3Service]
+    FileManagerComponent --> AuthService[AuthService]
+    
+    FileService --> S3Service
+    FileService --> Models
+    
+    S3Service --> AWSConfig[AWS Configuration]
+    S3Service --> Models
+    
+    AuthService --> UserModel[User Model]
+    
+    Models --> FileModel[File Model]
+    Models --> FolderModel[Folder Model]
+    Models --> UserModel
+
+    %% Component Hierarchy
+    AppComponent --> FileManagerComponent
+    FileManagerComponent --> FileList[FileListComponent]
+    FileManagerComponent --> FileUpload[FileUploadComponent]
+    FileManagerComponent --> FilePreview[FilePreviewComponent]
+    FileManagerComponent --> Breadcrumb[BreadcrumbComponent]
+    FileManagerComponent --> SearchBar[SearchBarComponent]
+
+    %% Service Dependencies
+    FileService --> HTTPClient[HttpClient]
+    S3Service --> AWSSDK[AWS SDK v3]
+    AuthService --> HTTPClient
+```
+
+The diagrams above show:
+
+1. **Project Structure**
+   - Directory layout of the application
+   - Main folders and their relationships
+   - Angular application structure
+
+2. **Class Relationships and Dependencies**
+   - Component hierarchy and relationships
+   - Service dependencies and interactions
+   - Model relationships
+   - External dependencies (AWS SDK, HttpClient)
+
 ## Development
 
 ### Available Scripts
