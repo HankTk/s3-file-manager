@@ -1,4 +1,5 @@
-export interface S3File {
+export interface S3File 
+{
   Key: string;
   LastModified: Date;
   ETag: string;
@@ -7,7 +8,8 @@ export interface S3File {
   url?: string;
 }
 
-export interface UploadProgress {
+export interface UploadProgress 
+{
   fileName: string;
   progress: number;
   status: 'uploading' | 'completed' | 'error';

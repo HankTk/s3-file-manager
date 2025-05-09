@@ -12,8 +12,7 @@ import { CommonModule } from '@angular/common';
     FileManagerComponent
   ]
 })
-export class AppComponent {
-
+export class AppComponent 
+{
   title = 'S3 File Manager';
-
 }

@@ -2,7 +2,8 @@ import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-interface AwsConfig {
+interface AwsConfig 
+{
   region: string;
   bucketName: string;
   endpoint: string;
@@ -13,8 +14,8 @@ interface AwsConfig {
 @Injectable({
   providedIn: 'root'
 })
-export class InitService {
-
+export class InitService 
+{
   private http = inject(HttpClient);
 
   private awsConfig = signal<AwsConfig>({
@@ -25,11 +26,13 @@ export class InitService {
     secretAccessKey: ''
   });
 
-  getAwsConfig() {
+  getAwsConfig() 
+  {
     return this.awsConfig.asReadonly();
   }
 
-  private updateAwsConfig(config: any): void {
+  private updateAwsConfig(config: any): void 
+  {
     this.awsConfig.set({
       region: config.AWS_REGION,
       bucketName: config.AWS_BUCKET_NAME,
@@ -39,15 +42,19 @@ export class InitService {
     });
   }
 
-  private handleConfigError(error: any, reject: (reason?: any) => void): void {
+  private handleConfigError(error: any, reject: (reason?: any) => void): void 
+  {
     console.error('Failed to load environment configuration:', error);
     reject(error);
   }
 
-  init(): Promise<void> {
-    return new Promise((resolve, reject) => {
+  init(): Promise<void> 
+  {
+    return new Promise((resolve, reject) => 
+    {
       this.http.get('http://localhost:3000/api/env').subscribe({
-        next: (config: any) => {
+        next: (config: any) => 
+        {
           this.updateAwsConfig(config);
           resolve();
         },
@@ -55,5 +62,4 @@ export class InitService {
       });
     });
   }
-
 } 

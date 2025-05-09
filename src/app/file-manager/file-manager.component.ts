@@ -17,7 +17,8 @@ import { FileSizePipe } from '../pipes/file-size.pipe';
     FileSizePipe
   ]
 })
-export class FileManagerComponent implements OnInit, OnDestroy {
+export class FileManagerComponent implements OnInit, OnDestroy
+{
 
   files: S3File[] = [];
   uploading = false;
@@ -28,58 +29,78 @@ export class FileManagerComponent implements OnInit, OnDestroy {
 
   private s3Service = inject(S3Service);
 
-  private handleUploadProgress(progress: UploadProgress | null) {
+  private handleUploadProgress(progress: UploadProgress | null) 
+  {
     this.uploadProgress = progress;
     this.uploading = progress?.status === 'uploading';
-    if (progress?.status === 'error') {
+    if (progress?.status === 'error') 
+    {
       this.error = progress.error || 'Upload failed';
     }
   }
 
-  ngOnInit() {
+  ngOnInit() 
+  {
     this.uploadProgressSubscription = this.s3Service.getUploadProgress().subscribe(
       this.handleUploadProgress.bind(this)
     );
     this.loadFiles();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy() 
+  {
     this.uploadProgressSubscription.unsubscribe();
   }
 
-  async loadFiles() {
-    try {
+  async loadFiles() 
+  {
+    try 
+    {
       this.files = await this.s3Service.listFiles();
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       this.error = 'Error loading files. Please try again.';
       console.error('Error loading files:', error);
     }
   }
 
-  async onFileSelected(event: Event) {
+  async onFileSelected(event: Event) 
+  {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
+    if (input.files && input.files.length > 0) 
+    {
       const file = input.files[0];
       this.error = null;
 
-      try {
+      try 
+      {
         await this.s3Service.uploadFile(file);
         await this.loadFiles();
-      } catch (error) {
+      } 
+      catch (error) 
+      {
         this.error = error instanceof Error ? error.message : 'Error uploading file. Please try again.';
         console.error('Error uploading file:', error);
-      } finally {
+      } 
+      finally 
+      {
         input.value = ''; // Reset the file input
       }
     }
   }
 
-  async deleteFile(key: string) {
-    if (confirm('Are you sure you want to delete this file?')) {
-      try {
+  async deleteFile(key: string) 
+  {
+    if (confirm('Are you sure you want to delete this file?')) 
+    {
+      try 
+      {
         await this.s3Service.deleteFile(key);
         await this.loadFiles();
-      } catch (error) {
+      } 
+      catch (error) 
+      {
         this.error = error instanceof Error ? error.message : 'Error deleting file. Please try again.';
         console.error('Error deleting file:', error);
       }

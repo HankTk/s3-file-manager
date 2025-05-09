@@ -7,19 +7,22 @@ import { InitService } from './init.service';
 @Injectable({
   providedIn: 'root'
 })
-export class S3Service {
-
+export class S3Service 
+{
   private s3Client: S3Client | null = null;
   private uploadProgress = new BehaviorSubject<UploadProgress | null>(null);
 
   private initService = inject(InitService);
 
-  constructor() {
+  constructor() 
+  {
     this.initializeS3Client();
   }
 
-  private async initializeS3Client(): Promise<void> {
-    try {
+  private async initializeS3Client(): Promise<void> 
+  {
+    try 
+    {
       await this.initService.init();
       const awsConfig = this.initService.getAwsConfig();
       this.s3Client = new S3Client({
@@ -37,29 +40,38 @@ export class S3Service {
           socketTimeout: 10000
         }
       });
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       console.error('Failed to initialize S3 client:', error);
       throw error;
     }
   }
 
-  private async ensureS3Client() {
-    if (!this.s3Client) {
+  private async ensureS3Client() 
+  {
+    if (!this.s3Client) 
+    {
       await this.initializeS3Client();
     }
-    if (!this.s3Client) {
+    if (!this.s3Client) 
+    {
       throw new Error('Failed to initialize S3 client');
     }
     return this.s3Client;
   }
 
-  getUploadProgress(): Observable<UploadProgress | null> {
+  getUploadProgress(): Observable<UploadProgress | null> 
+  {
     return this.uploadProgress.asObservable();
   }
 
-  async uploadFile(file: File): Promise<string> {
-    try {
-      if (file.size > 5 * 1024 * 1024 * 1024) {
+  async uploadFile(file: File): Promise<string> 
+  {
+    try 
+    {
+      if (file.size > 5 * 1024 * 1024 * 1024) 
+      {
         throw new Error('File size exceeds 5GB limit');
       }
 
@@ -90,7 +102,9 @@ export class S3Service {
       });
 
       return `https://${awsConfig().bucketName}.s3.${awsConfig().region}.amazonaws.com/${file.name}`;
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       this.uploadProgress.next({
         fileName: file.name,
@@ -102,8 +116,10 @@ export class S3Service {
     }
   }
 
-  async listFiles(): Promise<S3File[]> {
-    try {
+  async listFiles(): Promise<S3File[]> 
+  {
+    try 
+    {
       const s3Client = await this.ensureS3Client();
       const awsConfig = this.initService.getAwsConfig();
       const command = new ListObjectsV2Command({
@@ -115,14 +131,18 @@ export class S3Service {
         ...item,
         url: `https://${awsConfig().bucketName}.s3.${awsConfig().region}.amazonaws.com/${item.Key}`
       })) as S3File[];
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       console.error('Error listing files:', error);
       throw error;
     }
   }
 
-  async deleteFile(key: string): Promise<void> {
-    try {
+  async deleteFile(key: string): Promise<void> 
+  {
+    try 
+    {
       const s3Client = await this.ensureS3Client();
       const awsConfig = this.initService.getAwsConfig();
       const command = new DeleteObjectCommand({
@@ -131,7 +151,9 @@ export class S3Service {
       });
 
       await s3Client.send(command);
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       console.error('Error deleting file:', error);
       throw error;
     }
