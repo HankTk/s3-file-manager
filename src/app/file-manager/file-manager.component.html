@@ -1,43 +1,55 @@
 <!-- File Selection Interface -->
 <div class="upload-section">
   <input type="file" (change)="onFileSelected($event)" [disabled]="uploading">
-  <div *ngIf="uploadProgress" class="upload-progress">
-    <div class="progress-bar">
-      <div class="progress" [style.width.%]="uploadProgress.progress"></div>
+  @if (uploadProgress) {
+    <div class="upload-progress">
+      <div class="progress-bar">
+        <div class="progress" [style.width.%]="uploadProgress.progress"></div>
+      </div>
+      <span>{{ uploadProgress.fileName }} - {{ uploadProgress.progress }}%</span>
     </div>
-    <span>{{ uploadProgress.fileName }} - {{ uploadProgress.progress }}%</span>
+  }
+</div>
+
+<!-- Message -->
+@if (error) {
+  <div class="error-message">
+    {{ error }}
   </div>
-</div>
+}
 
-<div *ngIf="error" class="error-message">
-  {{ error }}
-</div>
-
+<!-- File Selection List -->
 <div class="files-section">
   <h2>Files</h2>
-  <div *ngIf="files.length === 0" class="no-files">
-    No files found
-  </div>
-  <table *ngIf="files.length > 0">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Size</th>
-        <th>Last Modified</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let file of files">
-        <td>
-          <a [href]="file.url" target="_blank">{{ file.Key }}</a>
-        </td>
-        <td>{{ file.Size | fileSize }}</td>
-        <td>{{ file.LastModified | date:'medium' }}</td>
-        <td>
-          <button (click)="deleteFile(file.Key)" class="delete-btn">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  @if (files.length === 0) {
+    <div class="no-files">
+      No files found
+    </div>
+  } 
+  @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Size</th>
+          <th>Last Modified</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (file of files; track file.Key) {
+          <tr>
+            <td>
+              <a [href]="file.url" target="_blank">{{ file.Key }}</a>
+            </td>
+            <td>{{ file.Size | fileSize }}</td>
+            <td>{{ file.LastModified | date:'medium' }}</td>
+            <td>
+              <button (click)="deleteFile(file.Key)" class="delete-btn">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 </div>
