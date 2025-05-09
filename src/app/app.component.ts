@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { FileManagerComponent } from './file-manager/file-manager.component';
 import { CommonModule } from '@angular/common';
 
@@ -10,10 +9,11 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet,
     FileManagerComponent
   ]
 })
 export class AppComponent {
+
   title = 'S3 File Manager';
+
 }
