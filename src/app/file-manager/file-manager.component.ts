@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { S3Service } from '../services/s3.service';
@@ -23,21 +23,23 @@ export class FileManagerComponent implements OnInit, OnDestroy {
   uploading = false;
   error: string | null = null;
   uploadProgress: UploadProgress | null = null;
-  private uploadProgressSubscription: Subscription;
 
-  constructor(private s3Service: S3Service) {
-    this.uploadProgressSubscription = this.s3Service.getUploadProgress().subscribe(
-      progress => {
-        this.uploadProgress = progress;
-        this.uploading = progress?.status === 'uploading';
-        if (progress?.status === 'error') {
-          this.error = progress.error || 'Upload failed';
-        }
-      }
-    );
+  private uploadProgressSubscription: Subscription = new Subscription();
+
+  private s3Service = inject(S3Service);
+
+  private handleUploadProgress(progress: UploadProgress | null) {
+    this.uploadProgress = progress;
+    this.uploading = progress?.status === 'uploading';
+    if (progress?.status === 'error') {
+      this.error = progress.error || 'Upload failed';
+    }
   }
 
   ngOnInit() {
+    this.uploadProgressSubscription = this.s3Service.getUploadProgress().subscribe(
+      this.handleUploadProgress.bind(this)
+    );
     this.loadFiles();
   }
 
