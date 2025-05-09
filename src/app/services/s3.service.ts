@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { environment } from '../../environments/environment';
 import { S3File, UploadProgress } from '../models/s3-file.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, from } from 'rxjs';
 import { InitService } from './init.service';
 
 @Injectable({
@@ -13,19 +12,22 @@ export class S3Service {
   private s3Client: S3Client | null = null;
   private uploadProgress = new BehaviorSubject<UploadProgress | null>(null);
 
-  constructor(private initService: InitService) {
+  private initService = inject(InitService);
+
+  constructor() {
     this.initializeS3Client();
   }
 
-  private async initializeS3Client() {
+  private async initializeS3Client(): Promise<void> {
     try {
       await this.initService.init();
+      const awsConfig = this.initService.getAwsConfig();
       this.s3Client = new S3Client({
-        region: environment.aws.region,
-        endpoint: environment.aws.endpoint,
+        region: awsConfig().region,
+        endpoint: awsConfig().endpoint,
         credentials: {
-          accessKeyId: environment.aws.accessKeyId || '',
-          secretAccessKey: environment.aws.secretAccessKey || ''
+          accessKeyId: awsConfig().accessKeyId || '',
+          secretAccessKey: awsConfig().secretAccessKey || ''
         },
         forcePathStyle: true,
         maxAttempts: 3,
@@ -69,9 +71,10 @@ export class S3Service {
 
       const arrayBuffer = await file.arrayBuffer();
       const s3Client = await this.ensureS3Client();
+      const awsConfig = this.initService.getAwsConfig();
       
       const command = new PutObjectCommand({
-        Bucket: environment.aws.bucketName,
+        Bucket: awsConfig().bucketName,
         Key: file.name,
         ContentType: file.type,
         ACL: 'public-read',
@@ -86,7 +89,7 @@ export class S3Service {
         status: 'completed'
       });
 
-      return `https://${environment.aws.bucketName}.s3.${environment.aws.region}.amazonaws.com/${file.name}`;
+      return `https://${awsConfig().bucketName}.s3.${awsConfig().region}.amazonaws.com/${file.name}`;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       this.uploadProgress.next({
@@ -102,14 +105,15 @@ export class S3Service {
   async listFiles(): Promise<S3File[]> {
     try {
       const s3Client = await this.ensureS3Client();
+      const awsConfig = this.initService.getAwsConfig();
       const command = new ListObjectsV2Command({
-        Bucket: environment.aws.bucketName
+        Bucket: awsConfig().bucketName
       });
 
       const response = await s3Client.send(command);
       return (response.Contents || []).map(item => ({
         ...item,
-        url: `https://${environment.aws.bucketName}.s3.${environment.aws.region}.amazonaws.com/${item.Key}`
+        url: `https://${awsConfig().bucketName}.s3.${awsConfig().region}.amazonaws.com/${item.Key}`
       })) as S3File[];
     } catch (error) {
       console.error('Error listing files:', error);
@@ -120,8 +124,9 @@ export class S3Service {
   async deleteFile(key: string): Promise<void> {
     try {
       const s3Client = await this.ensureS3Client();
+      const awsConfig = this.initService.getAwsConfig();
       const command = new DeleteObjectCommand({
-        Bucket: environment.aws.bucketName,
+        Bucket: awsConfig().bucketName,
         Key: key
       });
 

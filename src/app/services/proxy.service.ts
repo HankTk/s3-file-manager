@@ -1,21 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { InitService } from './init.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProxyService {
 
-  private bucketName = environment.aws.bucketName;
   private apiUrl = '/api';
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+  private initService = inject(InitService);
 
   uploadFile(file: File): Observable<any> {
+    const awsConfig = this.initService.getAwsConfig();
     return this.http.put(
-      `${this.apiUrl}/${this.bucketName}/${file.name}`,
+      `${this.apiUrl}/${awsConfig().bucketName}/${file.name}`,
       file,
       {
         headers: {
@@ -27,11 +28,13 @@ export class ProxyService {
   }
 
   listFiles(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${this.bucketName}?list-type=2`);
+    const awsConfig = this.initService.getAwsConfig();
+    return this.http.get(`${this.apiUrl}/${awsConfig().bucketName}?list-type=2`);
   }
 
   deleteFile(key: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${this.bucketName}/${encodeURIComponent(key)}`);
+    const awsConfig = this.initService.getAwsConfig();
+    return this.http.delete(`${this.apiUrl}/${awsConfig().bucketName}/${encodeURIComponent(key)}`);
   }
 
 } 
